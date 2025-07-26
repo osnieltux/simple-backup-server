@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" href="#" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .form-container {
+            max-width: 350px;
+            padding: 40px;
+            background-color: #F5F5F5;
+            margin: 50px auto;
+            border-radius: 4px;
+            box-shadow: 2px 2px 8px rgba(105, 133, 190, 0.7);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form action="/login" method="post">
+        <div class="form-container">
+            <input class="form-input" type="text" name="inputUser" required placeholder="User" autofocus />
+            <input class="form-input" type="password" name="inputPassword" required placeholder="Password" />
+            <button class="form-button" type="submit">Sign in</button>
+        </div>
+    </form>
+
+</body>
+
+</html>
+
+
+

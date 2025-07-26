@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Simple backup</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-sm navbar-dark  bg-dark">
+
+    
+	  <div class="container-fluid ">
+		<a class="navbar-brand " href="/">Backups</a>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		  <span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+		  <ul class="navbar-nav ">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                  <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+              </svg>
+              Logout
+          </a>
+        </li>
+
+        
+
+		  </ul>
+		</div>
+	  </div>
+	</nav>
+
+
+
+
+<br>
+
+<div class="container-fluid animate__animated animate__fadeIn">
+    <!-- bad header -->
+    <div class="" style="height: 71px;padding: 16px;margin: 0;background: rgba(19,163,79,0.51); border-top-left-radius: 40px; border-top-right-radius: 40px">
+        <nav>
+          <ul class="pagination pagination-sm mb-0 justify-content-center">
+              <button class="btn btn-success text-start"  type="button"
+                data-bs-toggle="modal" data-bs-target="#ModalCreateBackUp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-plus" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5z"/>
+                  <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                </svg>
+                 Create BackUp
+            </button>
+              <button class="btn btn-success text-start"  type="button"
+                data-bs-toggle="modal" data-bs-target="#uploadBackupModal">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                    <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                </svg>
+                 Upload BackUp
+            </button>
+          </ul>
+        </nav>
+    </div>
+
+     <div class="card" id="TableSorterCard">
+        <div class="row" style=" border-top-left-radius: 15px">
+            <div class="col-12" >
+                <div class="table-responsive" >
+                    <table class="table table-striped table-hover table-dark table-sm table-bordered table tablesorter" id="BackUpTable">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="text-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-stack" viewBox="0 0 16 16">
+                                        <path d="M14 10a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12zM2 9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z"/>
+                                        <path d="M5 11.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM14 3a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                                        <path d="M5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                                    </svg>
+                                    name
+                                </th>
+
+                                <th class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar4-week" viewBox="0 0 16 16">
+                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                                        <path d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                                        </svg>
+                                    Date
+                                </th>
+
+                                <th class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd" viewBox="0 0 16 16">
+                                        <path d="M4.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM3 10.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                                        <path d="M16 11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V9.51c0-.418.105-.83.305-1.197l2.472-4.531A1.5 1.5 0 0 1 4.094 3h7.812a1.5 1.5 0 0 1 1.317.782l2.472 4.53c.2.368.305.78.305 1.198V11zM3.655 4.26 1.592 8.043C1.724 8.014 1.86 8 2 8h12c.14 0 .276.014.408.042L12.345 4.26a.5.5 0 0 0-.439-.26H4.094a.5.5 0 0 0-.44.26zM1 10v1a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1z"/>
+                                        </svg>
+                                    Size
+                                </th>
+
+                                <th class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
+                                        <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313ZM13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 5.698ZM14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13V4Zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 8.698Zm0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525Z"/>
+                                    </svg>
+                                    BD
+                                </th>
+
+                                <th class="text-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                        <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z"/>
+                                    </svg>
+                                    User
+                                </th>
+
+                                
+
+
+                                <th class="text-end filter-false sorter-false"><i class="fas fa-align-end"></i>  Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-center" id="progress_table">
+
+                        </tbody>
+                    </table>
+
+                    <!-- Paginator -->
+                    <div class="card-footer text-center" style="height: 71px;padding: 16px;margin: 0;background: rgba(125,222,164,0.51);">
+                    <nav>
+                        <p>⚠️ Warning: Misuse of this tool may result in data loss. Proceed carefully</p>
+                      </ul>
+                    </nav>
+                  </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+
+</body>
+</html>
+
+<!-- Modal Restore backup  -->
+<div class="modal fade" id="ModalRestoreBackup" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="restoreBackupModalLabel">Restore BackUp</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="tab-content">
+
+          <form action="/" method="post">
+            <div class="tab-pane fade in show active" id="panel7" role="tabpanel">
+
+              <div class="form-group row">
+
+                <div class="col-md-6 modal-body">
+                  <div class="input-group form-outline form-white mb-4">
+              <span class="input-group-text ">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-stack" viewBox="0 0 16 16">
+                    <path d="M14 10a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12zM2 9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z"/>
+                    <path d="M5 11.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM14 3a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                    <path d="M5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                </svg>
+              </span>
+                    <input name="BackupName" type="text" class="form-control" autocomplete="off"
+                           title="Custom name"  placeholder="Custom bd name" id="customNameInput"
+                           onkeyup="validatorRestoreCustomName()"
+                    >
+                  </div>
+                </div>
+
+                <div class="col-md-6 modal-body" id="create_select_backup_name_label">
+                  <div class="input-group form-outline form-white mb-4" >
+                      <span class="input-group-text ">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
+                            <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313ZM13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 5.698ZM14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13V4Zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 8.698Zm0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525Z"/>
+                        </svg>
+                      </span>
+                    <select class="form-control" name="BDName" id="create_select_backup_name">
+                             <!--
+                            v-model="this.restore_list_name" @change="modal_restore_validator"
+                            -->
+
+                      <button class="btn " type="button" >
+
+                      </button>
+<!--                       <option  v-for="bdName in bd_names" >1</option> -->
+                    </select>
+                    <span class="input-group-text bg-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                          <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                          <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                        </svg>
+                  </span>
+                  </div>
+                </div>
+
+
+                <div class="col-md-12 modal-body">
+                    Type a name te personalize, or select one from the list.
+                </div>
+
+                <div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="restoreBackup()">Restore</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Create BackUp -->
+<div class="modal fade" id="ModalCreateBackUp" tabindex="-1" aria-labelledby="ModalCreateBackUp" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createBackupModalLabel">Create BackUp</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="tab-content">
+
+      <form action="/" method="post">
+          <div class="tab-pane fade in show active" role="tabpanel">
+
+              <div class="form-group row">
+
+                <div class="col-md-6 modal-body">
+                  <div class="input-group form-outline form-white mb-4">
+                  <span class="input-group-text ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-stack" viewBox="0 0 16 16">
+                        <path d="M14 10a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12zM2 9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z"/>
+                        <path d="M5 11.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM14 3a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                        <path d="M5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                    </svg>
+                  </span>
+                    <input name="BackupName" type="text" class="form-control" autocomplete="off" id="inputBackupName"
+                           title="Custom name" required="" placeholder="Custom name" onkeyup="validatorBDCustomName()">
+                  </div>
+                </div>
+
+              <div class="col-md-6 modal-body">
+                <div class="input-group form-outline form-white mb-4">
+                  <span class="input-group-text ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-database" viewBox="0 0 16 16">
+                        <path d="M4.318 2.687C5.234 2.271 6.536 2 8 2s2.766.27 3.682.687C12.644 3.125 13 3.627 13 4c0 .374-.356.875-1.318 1.313C10.766 5.729 9.464 6 8 6s-2.766-.27-3.682-.687C3.356 4.875 3 4.373 3 4c0-.374.356-.875 1.318-1.313ZM13 5.698V7c0 .374-.356.875-1.318 1.313C10.766 8.729 9.464 9 8 9s-2.766-.27-3.682-.687C3.356 7.875 3 7.373 3 7V5.698c.271.202.58.378.904.525C4.978 6.711 6.427 7 8 7s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 5.698ZM14 4c0-1.007-.875-1.755-1.904-2.223C11.022 1.289 9.573 1 8 1s-3.022.289-4.096.777C2.875 2.245 2 2.993 2 4v9c0 1.007.875 1.755 1.904 2.223C4.978 15.71 6.427 16 8 16s3.022-.289 4.096-.777C13.125 14.755 14 14.007 14 13V4Zm-1 4.698V10c0 .374-.356.875-1.318 1.313C10.766 11.729 9.464 12 8 12s-2.766-.27-3.682-.687C3.356 10.875 3 10.373 3 10V8.698c.271.202.58.378.904.525C4.978 9.71 6.427 10 8 10s3.022-.289 4.096-.777A4.92 4.92 0 0 0 13 8.698Zm0 3V13c0 .374-.356.875-1.318 1.313C10.766 14.729 9.464 15 8 15s-2.766-.27-3.682-.687C3.356 13.875 3 13.373 3 13v-1.302c.271.202.58.378.904.525C4.978 12.71 6.427 13 8 13s3.022-.289 4.096-.777c.324-.147.633-.323.904-.525Z"/>
+                    </svg>
+                  </span>
+                  <select class="form-control" name="BDName" id="select_create_backup_name"
+                         <!-- v-model="this.create_backup_bd" @change="modal_create_backup_validator" -->
+                  >
+                    <button class="btn " type="button" ><i class="material-icons material-icons-create-backup">dns</i></button>
+
+                    <!-- options are populated from js-->
+                  </select>
+                  <span class="input-group-text bg-primary">
+                    <i class="material-icons animate__animated animate__zoomIn" onclick="updateBDnames()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                          <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                          <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                        </svg>
+                    </i>
+                  </span>
+                </div>
+              </div>
+
+
+              <div class="col-md-12 modal-body">
+                  Select the BD and write a description name
+              </div>
+              <div>
+              </div>
+          </div>
+      </div>
+      </form>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id="createBUbutton" data-bs-dismiss="modal" onclick="PreCreateBackup()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ <div class="modal fade" id="ModalDeleteBackUp" tabindex="-1" aria-labelledby="ModalDeleteBackUp" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Delete BackUp.</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p id="deleteMessage">Do you really wants to delete backup?</p>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="deleteBackup()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+ <div class="modal fade" id="ModalDownloadBackUp" tabindex="-1" aria-labelledby="ModalDownloadBackUp" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Download BackUp.</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>Do you really wants to download this backup?</p>
+          <p>If you are connected by cellular data, this action may incur additional costs.</p>
+      </div>
+      <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="console.log(BackUpSelected)">Close</button>
+              <button type="submit" class="btn btn-primary"   data-bs-dismiss="modal" onclick="downloadBackup()">Download</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Upload Backup  -->
+<div class="modal fade" id="uploadBackupModal" tabindex="-1" aria-labelledby="createBackupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createBackupModalLabel">Upload Backup</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="tab-content">
+
+      <form action="/" method="post">
+          <div class="tab-pane fade in show active" role="tabpanel">
+              <div class="form-group row">
+
+                <div class="col-md-6 modal-body">
+                  <div class="input-group form-outline form-white mb-4">
+                  <span class="input-group-text ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hdd-stack" viewBox="0 0 16 16">
+                        <path d="M14 10a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h12zM2 9a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2H2z"/>
+                        <path d="M5 11.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM14 3a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h12zM2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2z"/>
+                        <path d="M5 4.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm-2 0a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                    </svg>
+                  </span>
+                    <input name="BackupName" type="text" class="form-control" autocomplete="off" id="customNameUploadBackup"
+                           title="Custom name" required="" placeholder="Custom name" onkeyup="uploadBackupModal_validator()">
+                  </div>
+                </div>
+
+              <div class="col-md-6 modal-body">
+                <div class="input-group form-outline form-white mb-4">
+
+                  <input class="" type="file" id="file" ref="file" style="display: none" onchange="updateFileNameLabel(),uploadBackupModal_validator()" />
+
+                    <button type="button" class="btn btn-success  is-rounded "
+                            onclick="document.getElementById('file').click();">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cloud-arrow-up" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M7.646 5.146a.5.5 0 0 1 .708 0l2 2a.5.5 0 0 1-.708.708L8.5 6.707V10.5a.5.5 0 0 1-1 0V6.707L6.354 7.854a.5.5 0 1 1-.708-.708l2-2z"/>
+                        <path d="M4.406 3.342A5.53 5.53 0 0 1 8 2c2.69 0 4.923 2 5.166 4.579C14.758 6.804 16 8.137 16 9.773 16 11.569 14.502 13 12.687 13H3.781C1.708 13 0 11.366 0 9.318c0-1.763 1.266-3.223 2.942-3.593.143-.863.698-1.723 1.464-2.383zm.653.757c-.757.653-1.153 1.44-1.153 2.056v.448l-.445.049C2.064 6.805 1 7.952 1 9.318 1 10.785 2.23 12 3.781 12h8.906C13.98 12 15 10.988 15 9.773c0-1.216-1.02-2.228-2.313-2.228h-.5v-.5C12.188 4.825 10.328 3 8 3a4.53 4.53 0 0 0-2.941 1.1z"/>
+                    </svg>
+                      Cargar
+                  </button>
+
+                </div>
+              </div>
+
+              <div class="col-md-12 modal-body" id="filename">
+                  <p id="filename">Empty</p>
+              </div>
+
+
+              <div class="col-md-12 modal-body">
+                  Este backup no tiene ninguna BD como referencia.
+              </div>
+              <div>
+              </div>
+          </div>
+      </div>
+      </form>
+    </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" disabled="" onclick="handleFileUpload()" id="uploadButton">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+    var notyf = new Notyf();
+     // Principal
+    // needed for django auth.
+    axios.defaults.xsrfHeaderName = "X-CSRFToken";
+    axios.defaults.xsrfCookieName = "csrftoken";
+    axios.defaults.withCredentials = true;
+
+    this.BackUpList = {}
+    this.BackUpSelected = -1
+    this.BackUpSelectedName = ""
+    this.BackUpfile = ""
+
+    let BackupCreateName = ""              // name of the bd
+    let BackupCreateCustomName = ""        // cname
+
+    let BackUpRestoreName = ""
+
+    let bd_names = []
+    let bd_names_blacklist = []
+
+    let select_backup_name = document.getElementById("select_backup_name");
+    let customNameInput = document.getElementById("customNameInput");
+    let create_select_backup_name = document.getElementById("create_select_backup_name")
+    let create_select_backup_name_label = document.getElementById("create_select_backup_name_label")
+    let select_create_backup_name = document.getElementById("select_create_backup_name");
+    let createBUbutton = document.getElementById("createBUbutton");
+    let inputBackupName = document.getElementById("inputBackupName")
+    let deleteMessage = document.getElementById("deleteMessage");
+    let filenameUploadModal = document.getElementById("filename")
+    let uploadButton = document.getElementById("uploadButton")
+    let file = document.getElementById("file")
+    let customName = document.getElementById("customNameUploadBackup")
+
+    const ModalRestoreBackup = document.getElementById("ModalRestoreBackup")
+
+    axios.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      function (error) {
+        if (error.response && error.response.status === 401) {
+          window.location.href = '/';
+        }
+        return Promise.reject(error);
+      }
+    );
+
+
+    async function deleteBackup() {
+         // console.log("delete backup id:" + BackUpSelected + ", name: "+ BackUpSelectedName)
+        let data = new FormData()
+        data.append("backup_id", BackUpSelected)
+        await axios
+            .post(
+                "/api/v1/delete_backup/",
+                data,
+            )
+            .then(response => {
+                // console.log(response.data);
+                if(response.data.status === "ok"){
+                    notyf.success(response.data.response)
+                } else {
+                    notyf.error({message: response.data.response,duration: 10000, dismissible: true})
+                }
+                UpDateTable()
+                }
+            )
+            .catch(error => {
+                notyf.error("Error: " + error);
+                }
+            )
+    };
+
+    async function downloadBackup(){
+        // console.log("downloadBackup")
+
+        axios({methods: 'get',
+         url: "/api/v1/download_bd/" + BackUpSelected,
+         responseType: 'blob',
+
+       }).then(function (response){
+         // console.log("Download response " + response.data);
+         // console.log(crypto.createHash('md5').update(response.data).digest('hex'));
+
+         var File = window.URL.createObjectURL(new  Blob([response.data]));
+         var docURL = document.createElement('a');
+
+         docURL.href = File;
+         docURL.setAttribute('download', BackUpfile)
+
+         document.body.appendChild(docURL);
+         docURL.click();
+       }).catch(error => {
+         // console.log("Error downloading " + BackUpSelectedName);
+         notyf.error('Error: ' + error);
+
+       })
+    };
+
+    async function createBackup() {
+        // console.log("create backup, BD:" + BackupCreateName + ", cname: "+ BackupCreateCustomName)
+        let data = new FormData()
+        data.append("backup_name", BackupCreateName)
+        data.append("backup_cname", BackupCreateCustomName)
+        // const headers = { "csrfmiddlewaretoken": '{{csrf_token}}'}
+        await axios
+            .post(
+                "/api/v1/create_backup/",
+                data,
+            )
+            .then(response => {
+                // console.log(response.data);
+                if(response.data.status === "ok"){
+                    UpDateTable();
+                    notyf.success(response.data.response)
+                } else {
+                    notyf.error(response.data.response)
+                }
+                }
+            )
+            .catch(error => {
+                notyf.error("Error: " + error);
+                }
+            )
+    };
+
+    function UpDateTableContent(){
+        const progress_table = document.getElementById("progress_table");
+
+        // cleaning content
+        var table = document.getElementById("BackUpTable");
+        for(var i = table.rows.length - 1; i > 0; i--)
+        {
+            table.deleteRow(i);
+        }
+
+        for(let i = 0; i<this.BackUpList.length; i++){
+            // console.log(this.BackUpList[i])
+            let row            = progress_table.insertRow();
+            let name           = row.insertCell(0);
+            let date           = row.insertCell(1);
+            let size           = row.insertCell(2);
+            let bd             = row.insertCell(3);
+            let username       = row.insertCell(4);
+            let buttons        = row.insertCell(5);
+
+            name.innerHTML     = this.BackUpList[i].name
+            date.innerHTML     = this.BackUpList[i].date
+            size.innerHTML     = this.BackUpList[i].size
+            bd.innerHTML       = this.BackUpList[i].bd
+            username.innerHTML = this.BackUpList[i].username
+            buttons.innerHTML  = `
+                <td class="text-end align-middle" style="max-height: 60px;height: 60px;">
+                        <button class="btn btn-success text-end"  type="button"
+                            data-bs-toggle="modal" data-bs-target="#ModalDownloadBackUp"
+                            onclick="BackUpSelected = ${this.BackUpList[i].id}; BackUpSelectedName='${this.BackUpList[i].name}'; BackUpfile='${this.BackUpList[i].bd}_${this.BackUpList[i].name}_${this.BackUpList[i].username}_${this.BackUpList[i].date}.bak' ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                              <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                            </svg>
+                             Download
+                        </button>
+
+                         <button class="btn btn-success text-end"  type="button"
+                            data-bs-toggle="modal" data-bs-target="#ModalRestoreBackup"
+                            onclick="BackUpSelected  = ${this.BackUpList[i].id};
+                                     BackUpRestoreName = '${this.BackUpList[i].bd}';
+                                     ">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                              <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+                            </svg>
+                             Restore
+                        </button>
+
+                        <button class="btn btn-success text-end"  type="button"
+                            data-bs-toggle="modal" data-bs-target="#ModalDeleteBackUp"
+                            onclick="BackUpSelected = ${this.BackUpList[i].id}; BackUpSelectedName='${this.BackUpList[i].name}'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                            </svg>
+                             Delete
+                        </button>
+                          </tr>
+            `
+        }
+    }
+
+    async function UpDateTable(){
+    await axios
+        .get("/api/v1/get_backups")
+        .then(response => {
+          // console.log("UpDateTable Response ", response.data),
+            console.log(response.data.BackUpList)
+            this.BackUpList = response.data.BackUpList
+            UpDateTableContent()
+          }
+        )
+        .catch(error => {
+            console.log("Error UpDateTable: " + error)
+            }
+        )
+        };
+
+    async function restoreBackup(){
+        // console.log("Restore BU id : "+ BackUpSelected + ", bdname: " + create_select_backup_name.value +  ", custom name: " + customNameInput.value);
+
+
+        let data = new FormData()
+        data.append("backup_id", BackUpSelected)
+
+        // set the final name.
+        if(customNameInput.value.length == 0){
+            data.append("backup_name", create_select_backup_name.value)
+            data.append("restore_create_new", "false")
+        } else {
+            data.append("backup_name", customNameInput.value)
+            data.append("restore_create_new", "true")
+        }
+
+        await axios
+            .post(
+                "/api/v1/restore_bd/",
+                data,
+            )
+            .then(response => {
+                // console.log(response.data);
+                 if(response.data.status === "ok"){
+                    UpDateTable();
+                    notyf.success(response.data.response)
+                } else {
+                    notyf.error(response.data.response)
+                }
+                }
+            )
+            .catch(error => {
+                notyf.error("Error: " + error);
+                }
+            )
+
+
+
+    }
+
+    async function updateBDnames(){
+        console.log("launch updateBDnames()");
+        await axios
+        .get("/api/v1/get_bd_names")
+        .then(response => {
+            // console.log(response.data)
+            if(response.data.status == "ok"){
+                // cleaning select
+                select_create_backup_name.innerHTML = ""
+                create_select_backup_name.innerHTML = ""
+                bd_names = response.data.bd_names;
+                bd_names_blacklist = response.data.bd_names_blacklist;
+
+                for (let i = 0; i < response.data.bd_names.length; i++) {
+                    let option = document.createElement("option");
+                    let option2 = document.createElement("option");
+                    option.value = response.data.bd_names[i].name;
+                    option.text = response.data.bd_names[i].name;
+
+                    option2.value = response.data.bd_names[i].name;
+                    option2.text = response.data.bd_names[i].name;
+
+                    // console.log("AAAA "+ option2.text + "    " + BackUpRestoreName)
+
+                    if(option2.text == BackUpRestoreName){
+                        option2.selected = true
+                    }
+
+                    select_create_backup_name.appendChild(option)
+                    create_select_backup_name.appendChild(option2)
+
+                }
+            } else {
+                console.log("Error requesting name data, please contact your admin. Error code " + response.data.response);
+                notyf.error({message: "Error requesting name data, please contact your admin. Error code " + response.data.response,
+                    duration: 10000, dismissible: true})
+            }
+        }
+        )
+        .catch(error => {
+            console.log("Error UpDateTable: " + error)
+            notyf.error("Error, please contact admin. "+error)
+            }
+        )
+        };
+
+
+    // console.log("Update table content")
+    UpDateTable()
+
+    //notyf.error('You must fill out the form before moving forward');
+    //notyf.success('Your changes have been successfully saved!');
+
+
+    updateBDnames();
+    validatorBDCustomName()
+
+
+    // validate custom name from restore
+    function validatorRestoreCustomName(){
+        if(customNameInput.value.length != 0){
+            create_select_backup_name_label.hidden = true
+        } else {
+            create_select_backup_name_label.hidden = false
+        }
+
+    }
+
+    // validator
+    function validatorBDCustomName(){
+        createBUbutton.disabled = false
+
+        // empty
+        if (inputBackupName.value.length == 0){
+            createBUbutton.disabled = true
+        }
+
+        // bd_name
+        for (let i = 0; i < bd_names.length; i++){
+            if(bd_names[i]==inputBackupName.value){
+                notyf.error("Name an BD cannot be te same.")
+                createBUbutton.disabled = true
+            }
+        }
+
+         // bd_names_blacklist
+        for (let i = 0; i < bd_names_blacklist.length; i++){
+            if(bd_names_blacklist[i]==inputBackupName.value){
+                notyf.error("Black list name.")
+                createBUbutton.disabled = true
+            }
+        }
+
+    };
+
+    // assign values and call BU creator.
+    function PreCreateBackup(){
+        BackupCreateCustomName =  inputBackupName.value;
+        BackupCreateName = select_create_backup_name.value;
+        createBackup()
+
+        // refresh list black list.
+        updateBDnames()
+    }
+
+    // script para pasar el valor del boton del id a eliminar contra el boton de eliminar del modal
+    const myModal = document.getElementById('ModalDeleteBackUp');
+
+    // autoselect the name of the bd to restore from "restore" button.
+    ModalRestoreBackup.addEventListener('shown.bs.modal', function () {
+         for(let i = 0;  i < create_select_backup_name.options.length; i++){
+             if( create_select_backup_name.options[i].value == BackUpRestoreName){
+                 create_select_backup_name.options[i].selected = true;
+                 break
+             }
+         }
+    });
+
+    // add name to the message.
+    myModal.addEventListener('shown.bs.modal', function () {
+         deleteMessage.innerText = `Do you really wants to delete '${BackUpSelectedName}' backup?`
+    });
+
+    // upload backup validator
+    function uploadBackupModal_validator(){
+      // console.log("Validar uploadfile " + " " + customName.value.length);
+      if(file.files.length == 0 || customName.value.length === 0){
+        uploadButton.disabled = true
+      } else {
+        uploadButton.disabled = false
+        }
+      };
+
+    // just put the name of the file
+    function  updateFileNameLabel(){
+      // carga el fichero para file_upload
+      // this.file_upload = this.$refs.file.files[0];
+      filenameUploadModal.innerHTML = file.value;
+      // console.log("Update filename label ");
+    };
+
+    async function handleFileUpload(){
+        const file_upload = file.files[0]
+        //console.log("file_upload: ", file_upload);
+
+        const formData = new FormData();
+        formData.append("file", file_upload);
+        formData.append("filename", customName.value);
+
+        await axios
+            .post("/api/v1/upload_bd/", formData)
+            .then(response => {
+                if(response.data.status === "ok"){
+                    notyf.success({message: response.data.response})
+                } else {
+                    notyf.error({message: response.data.response, duration: 10000, dismissible: true })
+                }
+                UpDateTable()
+
+        })
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
