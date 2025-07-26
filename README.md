@@ -39,6 +39,6 @@ systemctl restart sbs
 
 ```
 
-### default web access
+### default web access (hardcoded port)
 - http://0.0.0.0:5000
 - https://0.0.0.0:5000
