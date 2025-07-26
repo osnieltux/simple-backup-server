@@ -8,10 +8,10 @@ web server for backup and restore SQL
 ### install
 ```bash
 # download
-wget [https://github.com/osnieltux/simple-backup-server/archive/refs/heads/main.zip](https://codeload.github.com/osnieltux/simple-backup-server/zip/refs/heads/main)
+wget https://codeload.github.com/osnieltux/simple-backup-server/zip/refs/heads/main
 
 unzip simple-backup-server.zip 
-cd main
+cd simple-backup-server-main
 ./deploy.sh
 
 # set your config
