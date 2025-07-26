@@ -5,7 +5,7 @@ apt update && apt -y install python3-virtualenv
 INSTALL_PATH='/var/sbs/'
 
 mkdir -p "$INSTALL_PATH"/{backups,server}
-cp -r src/* "$INSTALL_PATH"/server/
+cp -r server/* "$INSTALL_PATH"/server/
 
 
 virtualenv "$INSTALL_PATH/venv/"
