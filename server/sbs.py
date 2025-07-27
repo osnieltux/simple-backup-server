@@ -663,7 +663,7 @@ def logout_api():
 @app.route("/api/v1/checklogin")
 @login_required
 def checkLogin_api():
-    data = {"status": "ok"}
+    data = {"status": True}
     return jsonify(data), 200
 
 
