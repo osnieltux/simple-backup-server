@@ -111,6 +111,8 @@ def check_configs():
             print(f'{config["server"]["DEFAULT_MSSQL_DATA"]}: is not a directory')
             exit(2)
 
+    DEFAULT_MSSQL_DATA = config["server"]["DEFAULT_MSSQL_DATA"]
+
     # sqlcmd_path
     if "sqlcmd_path" not in config["server"]:
         config["server"]["sqlcmd_path"] = "/opt/mssql-tools/bin/sqlcmd"
