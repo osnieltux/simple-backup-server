@@ -1,4 +1,4 @@
-# simple-backup-server
+# simple-backup-server for microsoft sql server on linux (ubuntu)
 web server for backup and restore SQL
 
 
